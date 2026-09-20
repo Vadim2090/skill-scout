@@ -8,6 +8,10 @@ It deliberately does NOT decide whether anything deserves to be a skill, does
 not name patterns, and never writes a skill file. That judgement is semantic
 and belongs to the model reading this output.
 
+lang-check: data — the stop-word list and the correction markers below are Russian
+because the prompts they match are. They are data this code compares against, not
+prose written for a reader; the Stop hook waives its language check on that marker.
+
 Reads   ~/.claude/projects/*/*.jsonl        Claude Code transcripts
 Cache   $SKILL_SCOUT_CACHE                  regenerable per-transcript features
 Ledger  $SKILL_SCOUT_STATE/skill-scout-ledger.json   what was already proposed
