@@ -1,0 +1,5 @@
+{
+  "definition": "TRUE = the user rejects, contradicts, stops or redirects something the agent produced or proposed. A fresh instruction that merely contains a negation is FALSE. Labels applied by Claude on 2026-09-20 over the deduplicated in-window corpus (1036 prompts, 54 current-marker hits); they are one reader's judgement, not a consensus.",
+  "true": ["ce288001","62ac34eb","a812ac0d","9e96c955","5e8af8fb","91de22d4","d7a34596","efa76a14","c7d24f1a","3961b400","375dafe1","705361e1","27975f2f","12e7b210","89053f20","5dd276a6","5f827fed","c8a59dd7","f5c92f6f","4b88e5f5","1e01db28","d9bdf797","93900515","d9275291","93fec3ac","359ffe20","2e90c8ed","4020ee1f","d9175539","abe2e5bf","17bfbcf2","f2ca20fd","988adefb","f4143ccd","c83c5b10","7f8b9367"],
+  "false": ["9230f2e8","27ad6345","60b5cd15","add3b9f0","c75e42b4","d8ed770e","06609da0","9a371f08","be61b469","403bbac0","f885ac89","672676e1","59fbf694","e36a7d45","2e39e5d9","7621220d","c80b93f7","44f9aead"]
+}
