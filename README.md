@@ -95,6 +95,29 @@ python3 $S --list-ledger                  # what was already decided
 python3 $S --record declined --terms "looker,filter,blended,source" --note "one-off"
 ```
 
+### Optional Jev semantic regrouping
+
+`scripts/jev-regroup.py` is an opt-in network helper for the semantic pass. It is
+never called by the scanner, `/finish`, or the default flow. Pipe a manifest into it:
+
+```bash
+python3 $S --days 21 --manifest | python3 scripts/jev-regroup.py
+```
+
+The default `--terms-only` mode sends TypeSafe the episode id, date, truncated
+project name, score, error/retry/correction counts, lexical group, and extracted
+terms. It does not send opening prompts. `--with-prompts` additionally sends each
+episode's verbatim opening prompt and therefore requires the same narrow,
+non-confidential `--scope` used to create the manifest:
+
+```bash
+python3 $S --days 21 --scope public-project --manifest \
+  | python3 scripts/jev-regroup.py --with-prompts --scope public-project
+```
+
+The helper rejects evidence excerpts, excludes ledger-declined (`~`) episodes,
+prints probability-gated proposals and API usage, and never writes the ledger.
+
 | Flag | Use |
 |---|---|
 | `--days N` | window, default 21. **Event time, not file time** — a session resumed today can carry prompts from months back |
@@ -117,14 +140,18 @@ It prints nothing unless three or more sessions on different days share a patter
 
 ## Privacy
 
-**Everything stays on your machine. Nothing is transmitted.** Two things are worth knowing
-before you run it in front of someone:
+The core scanner is network-free and transmits nothing. The optional
+`jev-regroup.py` helper makes a network request to TypeSafe only when run explicitly.
+Two things are worth knowing before you run either script in front of someone:
 
 - The digest, the manifest and `--evidence` all print **verbatim prompts** from your sessions,
   including whatever you consider private. Do not paste that output into a shared document.
 - The cache **persists prompt text** outside the skill directory, with no expiry. Deleting a
   transcript does not remove its cached copy. The cache directory is created `0700`; delete it
   with `rm -rf "$SKILL_SCOUT_CACHE"` when you want the copies gone.
+- Jev's default `--terms-only` request contains only episode metadata and extracted terms,
+  as listed above. `--with-prompts` also transmits verbatim opening prompts. Neither mode
+  accepts or sends `--evidence` excerpts. Never use prompt mode for a confidential scope.
 
 ## What the numbers mean, and what they do not
 
@@ -151,7 +178,9 @@ python3 tests/correction-precision.py
 
 ## Requirements
 
-- Python 3.9+, standard library only. No dependencies, no network calls
+- Python 3.9+, standard library only. The core scanner makes no network calls; the optional
+  Jev helper uses the standard library to call TypeSafe and reads `TYPESAFE_API_KEY` from the
+  environment
 - Claude Code, with transcripts under `~/.claude/projects/`. Raise `cleanupPeriodDays` in
   `~/.claude/settings.json` if you want a long history to scan
 
